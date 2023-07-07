@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "rock-vs-mine"
+version = "0.1.0"
+description = ""
+authors = ["techo kas <tscuser.kas@gmail.com>"]
+readme = "README.md"
+packages = [{include = "rock_vs_mine"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^1.25.0"
+pandas = "^2.0.3"
+scikit-learn = "^1.3.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.24.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
