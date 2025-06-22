@@ -1,20 +1,29 @@
 import React from "react";
-import RockVsMineLogo from "./RockVsMineLogo";
-import historyIcon from "../assets/history.svg";
+import { NavLink } from "react-router";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="backdrop-blur-md text-white px-4 py-3 flex justify-between items-center sticky top-0 z-50">
-      <a
-        href="/"
-        className="flex items-center space-x-4 hover:opacity-80 transition-opacity"
-      >
-        <RockVsMineLogo />
-      </a>
-      <div>
-        <a href="/history" className="hover:opacity-80 transition-opacity">
-          <img src={historyIcon} alt="History" className="h-7 w-7" />
-        </a>
+    <nav className="text-white py-3 flex justify-end items-center sticky top-0 z-50">
+      <div className="flex items-center space-x-6 mr-8">
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            "hover:opacity-80 transition-opacity text-lg font-semibold pb-1" +
+            (isActive ? " underline underline-offset-4" : "")
+          }
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/history"
+          className={({ isActive }) =>
+            "hover:opacity-80 transition-opacity text-lg font-semibold pb-1" +
+            (isActive ? " underline underline-offset-4" : "")
+          }
+        >
+          History
+        </NavLink>
       </div>
     </nav>
   );

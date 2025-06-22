@@ -1,0 +1,43 @@
+.sea-mine {
+  position: absolute;
+  bottom: 0;
+  left: 60%;
+  width: 44px;
+  height: 44px;
+}
+.sea-mine-body {
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  width: 36px;
+  height: 36px;
+  background: #1e293b;
+  border-radius: 50%;
+  border: 3px solid #64748b;
+  box-shadow: 0 2px 8px #0006;
+}
+.sea-mine-center {
+  position: absolute;
+  left: 16px;
+  top: 20px;
+  width: 12px;
+  height: 12px;
+  background: #f87171;
+  border-radius: 50%;
+  border: 2px solid #64748b;
+}
+.sea-mine-spike {
+  position: absolute;
+  width: 6px;
+  height: 18px;
+  background: #64748b;
+  border-radius: 3px;
+}
+.spike-top { left: 19px; top: -7px; transform: rotate(0deg);}
+.spike-bottom { left: 19px; top: 33px; transform: rotate(0deg);}
+.spike-left { left: -7px; top: 19px; transform: rotate(90deg);}
+.spike-right { left: 33px; top: 19px; transform: rotate(90deg);}
+.spike-topleft { left: 2px; top: 2px; transform: rotate(45deg);}
+.spike-topright { left: 30px; top: 2px; transform: rotate(-45deg);}
+.spike-bottomleft { left: 2px; top: 30px; transform: rotate(-45deg);}
+.spike-bottomright { left: 30px; top: 30px; transform: rotate(45deg);}

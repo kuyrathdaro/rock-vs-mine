@@ -1,23 +1,30 @@
 import React from "react";
+import mine from "../assets/images/mine.svg";
+import rock from "../assets/images/rock.svg";
+import { NavLink } from "react-router"; // Use react-router-dom
 
 type FooterProps = {
   year: number;
-  appName: string;
 };
 
-const Footer: React.FC<FooterProps> = ({ year, appName }) => (
-  <footer style={{ padding: '1rem', background: '#222', color: '#fff', textAlign: 'center' }}>
-    <div>
-      &copy; {year} {appName}
-    </div>
-    <div style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>
-      Built with <a href="https://react.dev/" style={{ color: '#61dafb' }}>React</a> &amp; <a href="https://vitejs.dev/" style={{ color: '#ffd700' }}>Vite</a>
-      {' | '}
-      <a href="https://github.com/yourusername/rock-vs-mine" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline' }}>
-        GitHub
-      </a>
-      {' | '}
-      <span>Contact: <a href="mailto:your@email.com" style={{ color: '#fff', textDecoration: 'underline' }}>your@email.com</a></span>
+const Footer: React.FC<FooterProps> = ({ year }) => (
+  <footer className="relative z-40 text-center p-0 mt-8">
+    <div className="w-full flex flex-col items-center justify-end relative overflow-hidden">
+      {/* Rocks and mine at the bottom */}
+      <NavLink
+        to="/"
+        end
+        className="flex items-center justify-center mb-2 text-2xl font-semibold text-gray-100 drop-shadow-lg"
+      >
+        <span className="mr-2 text-xl">Rock</span>
+        <img src={rock} alt="Rock" className="h-7 w-7 inline mr-2" />
+        <span className="text-xl font-bold">vs</span>
+        <img src={mine} alt="Mine" className="h-6 w-6 inline ml-2" />
+        <span className="ml-2 text-xl">Mine</span>
+      </NavLink>
+      <span className="block text-sm text-center text-white/90 pb-2 px-2 mx-auto w-fit drop-shadow">
+        © {year}. Made with ❤️ using React, Tailwind CSS & Scikit-learn.
+      </span>
     </div>
   </footer>
 );

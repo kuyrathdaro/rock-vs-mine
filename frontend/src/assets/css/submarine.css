@@ -1,0 +1,26 @@
+.sonar-radar {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  width: 80px;
+  height: 80px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  opacity: 0.3;
+  animation: sonar-pulse 2s infinite;
+}
+@keyframes sonar-pulse {
+  0% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(0.7);
+  }
+  70% {
+    opacity: 0.1;
+    transform: translateX(-50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.5);
+  }
+}

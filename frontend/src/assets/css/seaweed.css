@@ -1,0 +1,51 @@
+.seaweed-field {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  gap: 20px;
+  padding-left: 30px;
+}
+
+.seaweed {
+  position: relative;
+  width: 8px;
+  height: 120px;
+  background: linear-gradient(to top, #013220, #228B22);
+  border-radius: 50% 50% 0 0;
+  animation: wave 4s ease-in-out infinite;
+  transform-origin: bottom center;
+  filter: blur(0.2px);
+}
+
+.seaweed::before,
+.seaweed::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(to top, #004d00, #00cc44);
+  border-radius: 50% 50% 0 0;
+  left: -6px;
+  animation: waveAlt 5s ease-in-out infinite;
+  transform-origin: bottom center;
+  opacity: 0.7;
+}
+
+.seaweed::after {
+  left: 6px;
+  height: 90%;
+  animation-delay: 1.5s;
+  opacity: 0.5;
+}
+
+@keyframes wave {
+  0%   { transform: rotate(0deg); }
+  50%  { transform: rotate(8deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes waveAlt {
+  0%   { transform: rotate(0deg); }
+  50%  { transform: rotate(-6deg); }
+  100% { transform: rotate(0deg); }
+}

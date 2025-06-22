@@ -1,0 +1,73 @@
+
+.ocean-bg {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to bottom, #164e63 0%, #1e3a8a 100%);
+  overflow: hidden;
+}
+
+.bubbles {
+  box-shadow: inset 1px 1px 5px white;
+  cursor: pointer;
+  background: rgba(245, 247, 164, 0.05);
+  border: 0.04em solid rgba(255, 255, 255, 0.2);
+  border-color: rgba(228, 125, 46, 0.5);
+  border-radius: 50%;
+  animation: bubble 10s linear infinite;
+  position: absolute;
+  top: 101%;
+}
+
+.bubbles::after {
+  content: "";
+  width: 60%;
+  height: 60%;
+  border-top: 1px solid rgba(53, 220, 164, 0.5);
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+@keyframes bubble {
+  0% {
+    top: 101%;
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  10% {
+    transform: translateX(2%);
+  }
+  20% {
+    transform: translateX(-2%);
+  }
+  30% {
+    transform: translateX(2%);
+  }
+  40% {
+    transform: translateX(-2%);
+  }
+  50% {
+    transform: translateX(2%);
+  }
+  60% {
+    transform: translateX(-2%);
+  }
+  70% {
+    transform: translateX(2%);
+  }
+  80% {
+    transform: translateX(-2%);
+  }
+  90% {
+    transform: translateX(2%);
+  }
+  100% {
+    top: -10%;
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}

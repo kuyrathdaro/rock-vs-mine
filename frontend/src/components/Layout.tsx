@@ -1,19 +1,18 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { Outlet } from "react-router";
+import OceanScene from "./OceanScene"; // Import the ocean background component
 
-type LayoutProps = {
-    children: React.ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => (
-    <div>
-        <Navbar />
-        <main style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-            {children}
-        </main>
-        <Footer year={new Date().getFullYear()} appName="Rock vs Mine" />
-    </div>
-)
+const Layout: React.FC = () => (
+  <div className="min-h-screen flex flex-col relative overflow-hidden">
+    <OceanScene /> {/* Ocean background */}
+    <Navbar />
+    <main className="flex-1 relative z-30">
+      <Outlet />
+    </main>
+    <Footer year={2025} />
+  </div>
+);
 
 export default Layout;
