@@ -34,10 +34,10 @@
   border-radius: 3px;
 }
 .spike-top { left: 19px; top: -7px; transform: rotate(0deg);}
-.spike-bottom { left: 19px; top: 33px; transform: rotate(0deg);}
-.spike-left { left: -7px; top: 19px; transform: rotate(90deg);}
-.spike-right { left: 33px; top: 19px; transform: rotate(90deg);}
+.spike-bottom { left: 19px; top: 43px; transform: rotate(0deg);}
+.spike-left { left: -7px; top: 16px; transform: rotate(90deg);}
+.spike-right { left: 45px; top: 16px; transform: rotate(90deg);}
 .spike-topleft { left: 2px; top: 2px; transform: rotate(45deg);}
-.spike-topright { left: 30px; top: 2px; transform: rotate(-45deg);}
-.spike-bottomleft { left: 2px; top: 30px; transform: rotate(-45deg);}
-.spike-bottomright { left: 30px; top: 30px; transform: rotate(45deg);}
+.spike-topright { left: 36px; top: 2px; transform: rotate(-45deg);}
+.spike-bottomleft { left: 3px; top: 33px; transform: rotate(-45deg);}
+.spike-bottomright { left: 33px; top: 34px; transform: rotate(45deg);}
