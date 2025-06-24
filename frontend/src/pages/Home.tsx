@@ -1,5 +1,5 @@
 import React from "react";
-import PredictForm from "../components/PredictForm";
+import MainForm from "../components/MainForm";
 
 const Home: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const Home: React.FC = () => {
           data!
         </p>
       </header>
-      <PredictForm />
+      <MainForm />
     </>
   );
 };
