@@ -10,7 +10,6 @@ type FooterProps = {
 const Footer: React.FC<FooterProps> = ({ year }) => (
   <footer className="relative z-40 text-center p-0 mt-8">
     <div className="w-full flex flex-col items-center justify-end relative overflow-hidden">
-      {/* Rocks and mine at the bottom */}
       <NavLink
         to="/"
         end
@@ -22,6 +21,16 @@ const Footer: React.FC<FooterProps> = ({ year }) => (
         <img src={mine} alt="Mine" className="h-6 w-6 inline ml-2" />
         <span className="ml-2 text-xl">Mine</span>
       </NavLink>
+      <div className="mb-1">
+        <NavLink
+          to="/terms-privacy"
+          end
+          className="text-xs text-blue-200 hover:underline mx-2"
+          rel="noopener noreferrer"
+        >
+          Terms & Privacy
+        </NavLink>
+      </div>
       <span className="block text-sm text-center text-white/90 pb-2 px-2 mx-auto w-fit drop-shadow">
         © {year}. Made with ❤️ using React, Tailwind CSS & Scikit-learn.
       </span>

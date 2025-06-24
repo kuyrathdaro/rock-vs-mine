@@ -52,8 +52,17 @@ const OceanScene: React.FC = () => {
   return (
     <div
       ref={oceanRef}
-      className="ocean-bg absolute inset-0 w-full h-full z-0"
-      style={{ overflow: "hidden" }}
+      className="ocean-bg absolute top-0 left-0 w-full min-h-full z-0"
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        minHeight: "100%",
+        height: "100%",
+        overflow: "hidden",
+        pointerEvents: "none",
+      }}
     >
       <Submarine />
       {Array.from({ length: NUM_MINES }).map(() => {
