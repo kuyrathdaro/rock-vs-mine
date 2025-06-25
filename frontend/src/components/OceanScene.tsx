@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import "../assets/css/ocean.css";
+import "../styles/ocean.css";
 import SeaMine from "./SeaMine";
 import SeaWeed from "./SeaWeed";
 import Rock from "./Rock";

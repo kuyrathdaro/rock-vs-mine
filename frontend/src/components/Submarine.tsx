@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../assets/css/submarine.css"; // Import submarine styles
+import "../styles/submarine.css"; // Import submarine styles
 
 const SUBMARINE_WIDTH: number = 320; // Matches SVG viewBox width
 const SUBMARINE_HEIGHT: number = 88; // Matches SVG viewBox height

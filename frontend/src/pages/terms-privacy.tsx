@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router";
 
 const TermsPrivacy: React.FC = () => (
   <div className="flex flex-col items-center justify-center px-4">
@@ -27,9 +28,13 @@ const TermsPrivacy: React.FC = () => (
       </p>
 
       <div className="mt-8 text-center">
-        <a href="/" className="text-blue-300 hover:underline">
-          &larr; Back to Home
-        </a>
+        <NavLink
+          to="/"
+          end
+          className="inline-block px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        >
+          Back to Home
+        </NavLink>
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/css/sea-mine.css"; // Import the CSS for the sea mine
+import "../styles/sea-mine.css"; // Import the CSS for the sea mine
 
 type SeaMineProps = {
   left: string;

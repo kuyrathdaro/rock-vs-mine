@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/css/seaweed.css";
+import "../styles/seaweed.css";
 
 type SeaWeedProps = {
   left: string;

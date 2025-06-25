@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router";
 
 const NotFound: React.FC = () => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
@@ -7,12 +8,13 @@ const NotFound: React.FC = () => (
     <p className="text-lg text-blue-200 mb-6">
       Maybe it’s sunk to the ocean floor or never existed at all.
     </p>
-    <a
-      href="/"
+    <NavLink
+      to="/"
+      end
       className="inline-block px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
     >
       Back to Home
-    </a>
+    </NavLink>
     <div className="mt-8">
       <span role="img" aria-label="ocean" className="text-4xl">
         🌊 🪨 🚢 🦑
