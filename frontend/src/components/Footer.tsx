@@ -1,6 +1,6 @@
 import React from "react";
-import mine from "../assets/images/mine.svg";
-import rock from "../assets/images/rock.svg";
+import mine from "../assets/mine.svg";
+import rock from "../assets/rock.svg";
 import { NavLink } from "react-router"; // Use react-router-dom
 
 type FooterProps = {
