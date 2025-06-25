@@ -1,20 +1,38 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const Instruction: React.FC = () => {
     return (
-        <Typography>
-            <b>Instructions:</b>
-            <ul>
-                <li>
-                    <b>Input Text:</b> Enter comma-separated sonar data values in the text box and submit to predict if it is a rock or mine.
+        <Box color="#fff">
+            <Typography variant="h5" gutterBottom fontWeight="bold" color="primary.light" textAlign="center">
+                How to Use Rock vs Mine Sonar Predictor
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+                This app helps you predict whether sonar data corresponds to a rock or a mine. You can use it in two ways:
+            </Typography>
+            <ol style={{ paddingLeft: 20, marginBottom: 16 }}>
+                <li style={{ marginBottom: 12 }}>
+                    <b>Manual Input:</b>
+                    <ul style={{ marginTop: 4 }}>
+                        <li>Enter your sonar data as <b>comma-separated values</b> (e.g., <code>0.02,0.03,0.04,...</code>).</li>
+                        <li>Make sure you enter all required features (usually 60 values per sample).</li>
+                        <li>Click <b>Predict</b> to see if your data is classified as a rock or a mine.</li>
+                    </ul>
                 </li>
                 <li>
-                    <b>Upload File:</b> Upload a CSV file containing sonar data (one row per sample) to predict in batch.
+                    <b>Upload CSV:</b>
+                    <ul style={{ marginTop: 4 }}>
+                        <li>Prepare a CSV file where each row is a sonar sample (comma-separated values, no header required).</li>
+                        <li>Click <b>Upload CSV</b> and select your file.</li>
+                        <li>Click <b>Predict</b> to get results for all samples in your file.</li>
+                    </ul>
                 </li>
-            </ul>
-        </Typography>
-    )
-}
+            </ol>
+            <Typography variant="body2">
+                <b>Tip:</b> You can find example sonar data files online, or use your own measurements. Results are for educational purposes only.
+            </Typography>
+        </Box>
+    );
+};
 
 export default Instruction;
