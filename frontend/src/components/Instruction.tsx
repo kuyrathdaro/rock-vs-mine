@@ -4,14 +4,16 @@ import { Box, Typography } from '@mui/material';
 const Instruction: React.FC = () => {
     return (
         <Box sx={{
-            background: "rgba(10, 30, 80, 0.85)",
+            backdropFilter: "blur(8px)",
+            background: "rgba(255,255,255,0.10)",
+            border: "1px solid rgba(191,219,254,0.3)",
             borderRadius: 3,
             boxShadow: 6,
-            p: 4,
+            maxWidth: "600px",
             width: "100%",
-            height: "100%",
-            maxWidth: 600,
-            mx: "auto", color: "#fff"
+            p: 4,
+            mx: "auto",
+            color: "#fff"
         }}>
             <Typography variant="h5" gutterBottom fontWeight="bold" color="white" textAlign="center">
                 How to Use Rock vs Mine Sonar Predictor

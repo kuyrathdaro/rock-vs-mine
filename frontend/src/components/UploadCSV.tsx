@@ -23,14 +23,16 @@ const UploadCSV: React.FC = () => {
         <Paper
             elevation={6}
             sx={{
-                background: "rgba(10, 30, 80, 0.85)",
+                backdropFilter: "blur(8px)",
+                background: "rgba(255,255,255,0.10)",
+                border: "1px solid rgba(191,219,254,0.3)",
                 borderRadius: 3,
                 boxShadow: 6,
-                p: 4,
+                maxWidth: "600px",
                 width: "100%",
-                height: "100%",
-                maxWidth: 600,
+                p: 4,
                 mx: "auto",
+                color: "#fff"
             }}
         >
             <form onSubmit={handleFileSubmit}>
@@ -54,14 +56,7 @@ const UploadCSV: React.FC = () => {
                             ? <>Selected file: <b>{file.name}</b></>
                             : "Choose a CSV file with sonar data (one row per sample, no header required)."}
                     </Typography>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        disabled={!file}
-                        size="large"
-                        sx={{ width: 180 }}
-                    >
+                    <Button type="submit" variant="contained" color="primary" size="large" sx={{ mt: 2 }}>
                         Predict
                     </Button>
                 </Box>

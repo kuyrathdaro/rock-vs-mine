@@ -15,14 +15,16 @@ const ManualInput: React.FC = () => {
     return (
         <Box
             sx={{
-                background: "rgba(10, 30, 80, 0.85)",
+                backdropFilter: "blur(8px)",
+                background: "rgba(255,255,255,0.10)",
+                border: "1px solid rgba(191,219,254,0.3)",
                 borderRadius: 3,
                 boxShadow: 6,
-                p: 4,
+                maxWidth: "600px",
                 width: "100%",
-                height: "100%",
-                maxWidth: 600,
+                p: 4,
                 mx: "auto",
+                color: "#fff"
             }}
         >
             <form onSubmit={handleTextSubmit}>
@@ -36,17 +38,23 @@ const ManualInput: React.FC = () => {
                     value={inputText}
                     onChange={handleTextChange}
                     margin="normal"
-                    InputProps={{
-                        style: {
-                            fontSize: "1.1rem",
-                            padding: "20px",
-                            color: "#fff",
-                            background: "rgba(20, 40, 100, 0.95)",
-                            borderRadius: 8,
+                    slotProps={{
+                        input: {
+                            style: {
+                                backdropFilter: "blur(8px)",
+                                background: "rgba(255,255,255,0.10)",
+                                border: "1px solid rgba(191,219,254,0.3)",
+                                fontSize: "1.1rem",
+                                padding: "20px",
+                                color: "#fff",
+                                borderRadius: 8,
+                            },
+                        },
+                        inputLabel: {
+                            style: {
+                                color: "#fff"
+                            }
                         }
-                    }}
-                    InputLabelProps={{
-                        style: { color: "#bbdefb" }
                     }}
                 />
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
