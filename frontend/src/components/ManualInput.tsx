@@ -52,9 +52,22 @@ const ManualInput: React.FC = () => {
                         },
                         inputLabel: {
                             style: {
-                                color: "#fff"
+                                color: "#fff",
                             }
                         }
+                    }}
+                    sx={{
+                        "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                                border: "1px solid rgba(191,219,254,0.3)",
+                            },
+                            "&:hover fieldset": {
+                                border: "1px solid rgba(191,219,254,0.3)",
+                            },
+                            "&.Mui-focused fieldset": {
+                                border: "1px solid rgba(191,219,254,0.3)",
+                            },
+                        },
                     }}
                 />
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
