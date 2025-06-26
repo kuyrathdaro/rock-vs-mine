@@ -3,11 +3,20 @@ import { Box, Typography } from '@mui/material';
 
 const Instruction: React.FC = () => {
     return (
-        <Box color="#fff">
-            <Typography variant="h5" gutterBottom fontWeight="bold" color="primary.light" textAlign="center">
+        <Box sx={{
+            background: "rgba(10, 30, 80, 0.85)",
+            borderRadius: 3,
+            boxShadow: 6,
+            p: 4,
+            width: "100%",
+            height: "100%",
+            maxWidth: 600,
+            mx: "auto", color: "#fff"
+        }}>
+            <Typography variant="h5" gutterBottom fontWeight="bold" color="white" textAlign="center">
                 How to Use Rock vs Mine Sonar Predictor
             </Typography>
-            <Typography variant="body1" gutterBottom>
+            <Typography variant="body1" color="white" gutterBottom>
                 This app helps you predict whether sonar data corresponds to a rock or a mine. You can use it in two ways:
             </Typography>
             <ol style={{ paddingLeft: 20, marginBottom: 16 }}>
