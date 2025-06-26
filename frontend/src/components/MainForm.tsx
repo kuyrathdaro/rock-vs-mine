@@ -17,6 +17,10 @@ const MainForm: React.FC = () => {
                 sx={{
                     "& .MuiTab-root": {
                         color: "#fff",
+                        transition: "color 0.2s",
+                        "&:hover": {
+                            color: "#90caf9", // Light blue on hover
+                        },
                     },
                     "& .Mui-selected": {
                         color: "#90caf9", // Light blue for selected tab
@@ -42,7 +46,7 @@ const MainForm: React.FC = () => {
                     <Instruction />
                 )}
                 {tabIndex === 1 && (
-                   <ManualInput />
+                    <ManualInput />
                 )}
                 {tabIndex === 2 && (
                     <UploadCSV />
