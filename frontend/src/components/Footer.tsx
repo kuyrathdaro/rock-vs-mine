@@ -8,7 +8,7 @@ type FooterProps = {
 };
 
 const Footer: React.FC<FooterProps> = ({ year }) => (
-  <footer className="relative z-40 text-center p-0 mt-8">
+  <footer className="relative z-0 text-center p-0 mt-8">
     <div className="w-full flex flex-col items-center justify-end relative overflow-hidden">
       <NavLink
         to="/"

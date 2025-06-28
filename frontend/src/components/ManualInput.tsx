@@ -1,8 +1,9 @@
 import type React from "react";
 import { useState } from "react";
-import { TextField, Button, Box, Typography, Alert } from "@mui/material";
+import { TextField, Button, Box, Alert, Snackbar } from "@mui/material";
 import { predictSonar } from "../services/sonarApi";
 import { z } from "zod";
+import PredictResult from "./PredictResult";
 
 const sonarSchema = z.string().refine((val) => {
     const values = val.split(",").map(v => v.trim()).filter(v => v !== "");
@@ -47,100 +48,101 @@ const ManualInput: React.FC = () => {
     };
 
     return (
-        <Box
-            sx={{
-                backdropFilter: "blur(8px)",
-                background: "rgba(255,255,255,0.10)",
-                border: "1px solid rgba(191,219,254,0.3)",
-                borderRadius: 3,
-                boxShadow: 6,
-                maxWidth: "600px",
-                width: "100%",
-                p: 4,
-                mx: "auto",
-                color: "#fff"
-            }}
-        >
-            <form onSubmit={handleTextSubmit}>
-                <TextField
-                    label="Sonar Data (comma-separated)"
-                    variant="outlined"
-                    fullWidth
-                    multiline
-                    minRows={10}
-                    maxRows={16}
-                    value={inputText}
-                    onChange={handleTextChange}
-                    margin="normal"
-                    error={!!error}
-                    helperText={error ? error : "Enter 60 comma-separated numbers (features)."}
-                    slotProps={{
-                        input: {
-                            style: {
-                                backdropFilter: "blur(8px)",
-                                background: "rgba(255,255,255,0.10)",
-                                fontSize: "1.1rem",
-                                padding: "20px",
-                                color: "#fff",
-                                borderRadius: 8,
+        <>
+            <Box
+                sx={{
+                    backdropFilter: "blur(8px)",
+                    background: "rgba(255,255,255,0.10)",
+                    border: "1px solid rgba(191,219,254,0.3)",
+                    borderRadius: 3,
+                    boxShadow: 6,
+                    maxWidth: "600px",
+                    width: "100%",
+                    p: 4,
+                    mx: "auto",
+                    color: "#fff"
+                }}
+            >
+                <form onSubmit={handleTextSubmit}>
+                    <TextField
+                        label="Sonar Data (comma-separated)"
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        minRows={10}
+                        maxRows={16}
+                        value={inputText}
+                        onChange={handleTextChange}
+                        margin="normal"
+                        error={!!error}
+                        helperText={error ? error : "Enter 60 comma-separated numbers (features)."}
+                        slotProps={{
+                            input: {
+                                style: {
+                                    backdropFilter: "blur(8px)",
+                                    background: "rgba(255,255,255,0.10)",
+                                    fontSize: "1.1rem",
+                                    padding: "20px",
+                                    color: "#fff",
+                                    borderRadius: 8,
+                                },
                             },
-                        },
-                        inputLabel: {
-                            style: {
-                                color: "#fff",
+                            inputLabel: {
+                                style: {
+                                    color: "#fff",
+                                }
                             }
-                        }
-                    }}
-                    sx={{
-                        "& .MuiOutlinedInput-root": {
-                            "& fieldset": {
-                                border: "1px solid rgba(191,219,254,0.3)",
+                        }}
+                        sx={{
+                            "& .MuiOutlinedInput-root": {
+                                "& fieldset": {
+                                    border: "1px solid rgba(191,219,254,0.3)",
+                                },
+                                "&:hover fieldset": {
+                                    border: "1px solid rgba(191,219,254,0.3)",
+                                },
+                                "&.Mui-focused fieldset": {
+                                    border: "1px solid rgba(191,219,254,0.3)",
+                                },
                             },
-                            "&:hover fieldset": {
-                                border: "1px solid rgba(191,219,254,0.3)",
-                            },
-                            "&.Mui-focused fieldset": {
-                                border: "1px solid rgba(191,219,254,0.3)",
-                            },
-                        },
-                    }}
-                />
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        sx={{ mt: 2 }}
-                        disabled={loading}
+                        }}
+                    />
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            sx={{ mt: 2 }}
+                            disabled={loading}
+                        >
+                            {loading ? "Predicting..." : "Predict"}
+                        </Button>
+                    </Box>
+                </form>
+            </Box>
+            {
+                result && (
+                    <PredictResult
+                        result={result}
+                    />
+                )
+            }
+            {
+                error && (
+                    <Snackbar
+                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                        open={!!error}
+                        autoHideDuration={6000}
+                        onClose={() => setError(null)}
                     >
-                        {loading ? "Predicting..." : "Predict"}
-                    </Button>
-                </Box>
-            </form>
-            {result && (
-                <Box
-                    sx={{
-                        mt: 4,
-                        p: 3,
-                        borderRadius: 2,
-                        background: "rgba(16, 40, 80, 0.85)",
-                        color: "#fff",
-                        textAlign: "center",
-                        boxShadow: 3,
-                    }}
-                >
-                    <Typography variant="h6">
-                        Prediction Result: {result}
-                    </Typography>
-                </Box>
-            )}
-            {error && (
-                <Alert severity="error" sx={{ mt: 3 }}>
-                    {error}
-                </Alert>
-            )}
-        </Box>
+                        <Alert onClose={() => setError(null)} severity="error">
+                            {error}
+                        </Alert>
+                    </Snackbar>
+                )
+            }
+        </>
     )
 }
 
