@@ -80,11 +80,13 @@ const ManualInput: React.FC = () => {
                             input: {
                                 style: {
                                     backdropFilter: "blur(8px)",
-                                    background: "rgba(255,255,255,0.10)",
+                                    background: "rgba(16, 40, 80, 0.85)",
                                     fontSize: "1.1rem",
                                     padding: "20px",
                                     color: "#fff",
                                     borderRadius: 8,
+                                    caretColor: "#90caf9",
+                                    cursor: "text",
                                 },
                             },
                             inputLabel: {
