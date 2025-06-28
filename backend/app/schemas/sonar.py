@@ -1,13 +1,14 @@
 from pydantic import BaseModel, field_validator
+from typing import List
 
 class SonarInput(BaseModel):
-    features: list[float]
+    data: List[float]
 
-    @field_validator('features')
+    @field_validator('data')
     @classmethod
     def check_length(cls, v):
         if len(v) != 60:
-            raise ValueError('features must have exactly 60 values')
+            raise ValueError('data must have exactly 60 values')
         return v
 
 class SonarPrediction(BaseModel):

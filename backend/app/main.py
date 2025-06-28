@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1 import predict, train
+from app.api.v1 import train, predict
 
 app = FastAPI(swagger_ui_parameters={ "syntaxHighlight.theme": "dracula"})
 

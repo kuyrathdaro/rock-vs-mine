@@ -1,0 +1,15 @@
+name: ml
+channels:
+ - defaults
+ - conda-forge
+dependencies:
+  - python=3.10
+  - numpy
+  - scikit-learn
+  - pandas
+  - pytest
+  - httpx
+  - pip
+  - pip:
+    - fastapi
+    - uvicorn
