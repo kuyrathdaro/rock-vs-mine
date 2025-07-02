@@ -1,13 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../styles/submarine.css"; // Import submarine styles
+import "../styles/submarine.css";
 
-const SUBMARINE_WIDTH: number = 320; // Matches SVG viewBox width
-const SUBMARINE_HEIGHT: number = 88; // Matches SVG viewBox height
+type SubmarineProps = {
+  explode?: boolean;
+};
 
-const getRandomLeft = () => `${Math.floor(Math.random() * 80) + 5}%`;
-const getRandomTop = () => `${Math.floor(Math.random() * 35) + 5}%`;
+const SUBMARINE_WIDTH = 320;
+const SUBMARINE_HEIGHT = 88;
 
-const Submarine: React.FC = () => {
+// Keep submarine in the vertical middle of the screen
+const getRandomLeft = () => `${Math.floor(Math.random() * 60) + 20}%`; // 20% to 80%
+const getRandomTop = () => `${Math.floor(Math.random() * 30) + 35}%`; // 35% to 65%
+
+const Submarine: React.FC<SubmarineProps> = ({ explode = false }) => {
   const [left, setLeft] = useState(getRandomLeft());
   const [top, setTop] = useState(getRandomTop());
   const [flip, setFlip] = useState(false);
@@ -20,7 +25,6 @@ const Submarine: React.FC = () => {
       setFlip(newLeft < left);
       setLeft(newLeft);
       setTop(newTop);
-      // Move every 12–18 seconds for slower movement
       moveTimeout.current = window.setTimeout(
         move,
         Math.random() * 6000 + 12000
@@ -30,6 +34,7 @@ const Submarine: React.FC = () => {
     return () => {
       if (moveTimeout.current) clearTimeout(moveTimeout.current);
     };
+    // eslint-disable-next-line
   }, [left]);
 
   return (
@@ -38,19 +43,13 @@ const Submarine: React.FC = () => {
         position: "absolute",
         top,
         left,
-        transition:
-          "left 10s cubic-bezier(.4,2,.6,1), top 10s cubic-bezier(.4,2,.6,1)",
+        transition: "left 10s cubic-bezier(.4,2,.6,1), top 10s cubic-bezier(.4,2,.6,1)",
         zIndex: 20,
         width: `${SUBMARINE_WIDTH}px`,
         height: `${SUBMARINE_HEIGHT}px`,
         pointerEvents: "none",
       }}
     >
-      {/* Sonar Radar */}
-      <div className="sonar-radar" style={{ animationDelay: "0s" }} />
-      <div className="sonar-radar" style={{ animationDelay: "0.7s" }} />
-      <div className="sonar-radar" style={{ animationDelay: "1.4s" }} />
-      {/* Submarine SVG */}
       <svg
         width={SUBMARINE_WIDTH}
         height={SUBMARINE_HEIGHT}
@@ -58,67 +57,124 @@ const Submarine: React.FC = () => {
         style={{
           transform: flip ? "scaleX(-1)" : undefined,
           transition: "transform 0.5s",
+          position: "relative",
+          zIndex: 1,
         }}
       >
+        {/* Sonar radar (animated with CSS) */}
+        <g>
+          <circle
+            cx="270"
+            cy="44"
+            r="18"
+            fill="none"
+            stroke="#90caf9"
+            strokeWidth="2"
+            opacity="0.5"
+            className="sonar-pulse"
+          />
+          <circle
+            cx="270"
+            cy="44"
+            r="28"
+            fill="none"
+            stroke="#90caf9"
+            strokeWidth="1"
+            opacity="0.3"
+            className="sonar-pulse2"
+          />
+          <circle
+            cx="270"
+            cy="44"
+            r="38"
+            fill="none"
+            stroke="#90caf9"
+            strokeWidth="1"
+            opacity="0.15"
+            className="sonar-pulse3"
+          />
+        </g>
         {/* Submarine body */}
-        <ellipse cx="160" cy="60" rx="120" ry="28" fill="#475569" />
-        {/* Hull shadow */}
-        <ellipse
-          cx="160"
-          cy="72"
-          rx="110"
-          ry="16"
-          fill="#334155"
-          opacity="0.3"
-        />
-        {/* Conning tower */}
-        <rect x="130" y="28" width="60" height="32" rx="12" fill="#64748b" />
+        <ellipse cx="160" cy="44" rx="110" ry="30" fill="#3a3a3a" stroke="#222" strokeWidth="4" />
+        {/* Submarine deck */}
+        <rect x="200" y="20" width="30" height="32" fill="#555" stroke="#222" strokeWidth="3" rx="8" />
+        {/* Submarine window */}
+        <circle cx="230" cy="36" r="8" fill="#90caf9" stroke="#222" strokeWidth="2" />
+        {/* Submarine propeller */}
+        <rect x="40" y="38" width="16" height="12" fill="#888" stroke="#222" strokeWidth="2" rx="3" />
         {/* Periscope */}
-        <rect x="185" y="10" width="6" height="24" rx="3" fill="#64748b" />
-        <rect x="183" y="6" width="10" height="8" rx="4" fill="#64748b" />
-        {/* Windows */}
-        <ellipse
-          cx="150"
-          cy="44"
-          rx="8"
-          ry="8"
-          fill="#bae6fd"
-          stroke="#38bdf8"
-          strokeWidth="3"
-        />
-        <ellipse
-          cx="170"
-          cy="44"
-          rx="8"
-          ry="8"
-          fill="#bae6fd"
-          stroke="#38bdf8"
-          strokeWidth="3"
-        />
-        {/* Propeller */}
-        <ellipse cx="40" cy="60" rx="10" ry="10" fill="#fbbf24" />
-        <rect
-          x="30"
-          y="56"
-          width="8"
-          height="8"
-          rx="2"
-          fill="#fbbf24"
-          transform="rotate(-20 34 60)"
-        />
-        <rect
-          x="42"
-          y="56"
-          width="8"
-          height="8"
-          rx="2"
-          fill="#fbbf24"
-          transform="rotate(20 46 60)"
-        />
+        <rect x="215" y="8" width="6" height="18" fill="#bbb" stroke="#222" strokeWidth="2" rx="2" />
+        <circle cx="218" cy="8" r="4" fill="#90caf9" stroke="#222" strokeWidth="1" />
         {/* Fins */}
-        <rect x="260" y="70" width="24" height="8" rx="4" fill="#64748b" />
-        <rect x="260" y="50" width="24" height="8" rx="4" fill="#64748b" />
+        <polygon points="60,44 30,34 30,54" fill="#666" stroke="#222" strokeWidth="2" />
+        {/* Sonar dome */}
+        <ellipse cx="270" cy="44" rx="12" ry="18" fill="#90caf9" opacity="0.3" />
+        {/* Explosion overlay (centered on submarine) */}
+        {explode && (
+          <g>
+            <circle
+              cx="160"
+              cy="44"
+              r="40"
+              fill="url(#explosionGradient)"
+              opacity="0.7"
+            >
+              <animate
+                attributeName="r"
+                from="10"
+                to="60"
+                dur="0.7s"
+                fill="freeze"
+              />
+              <animate
+                attributeName="opacity"
+                from="0.9"
+                to="0"
+                dur="0.7s"
+                fill="freeze"
+              />
+            </circle>
+            <defs>
+              <radialGradient id="explosionGradient">
+                <stop offset="0%" stopColor="#fff700" />
+                <stop offset="60%" stopColor="#ff5252" />
+                <stop offset="100%" stopColor="transparent" />
+              </radialGradient>
+            </defs>
+          </g>
+        )}
       </svg>
+      {/* Sonar radar animation CSS */}
+      <style>
+        {`
+          .sonar-pulse {
+            animation: sonarPulse 2s infinite;
+            transform-origin: 270px 44px;
+          }
+          .sonar-pulse2 {
+            animation: sonarPulse 2s infinite 0.5s;
+            transform-origin: 270px 44px;
+          }
+          .sonar-pulse3 {
+            animation: sonarPulse 2s infinite 1s;
+            transform-origin: 270px 44px;
+          }
+          @keyframes sonarPulse {
+            0% {
+              opacity: 0.5;
+              transform: scale(1);
+            }
+            70% {
+              opacity: 0.1;
+              transform: scale(1.4);
+            }
+            100% {
+              opacity: 0;
+              transform: scale(1.7);
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };

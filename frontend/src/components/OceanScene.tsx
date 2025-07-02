@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import "../styles/ocean.css";
 import SeaMine from "./SeaMine";
 import SeaWeed from "./SeaWeed";
 import Rock from "./Rock";
 import Submarine from "./Submarine";
+import { useExplosion } from "../hooks/useExplosion";
 
 const NUM_SEAWEEDS: number = 100;
 const NUM_MINES: number = 5;
@@ -11,6 +12,35 @@ const NUM_ROCKS: number = 20;
 
 const OceanScene: React.FC = () => {
   const oceanRef = useRef<HTMLDivElement>(null);
+  const { explode } = useExplosion();
+
+    const mines = useMemo(
+    () =>
+      Array.from({ length: NUM_MINES }).map((_, i) => ({
+        key: `mine-${i}`,
+        left: `${Math.floor(Math.random() * 85) + 5}%`,
+        chainHeight: Math.floor(Math.random() * 50) + 80,
+      })),
+    []
+  );
+  const rocks = useMemo(
+    () =>
+      Array.from({ length: NUM_ROCKS }).map((_, i) => ({
+        key: `rock-${i}`,
+        left: `${Math.floor(Math.random() * 95)}%`,
+        size: Math.floor(Math.random() * 40) + 20,
+      })),
+    []
+  );
+  const seaweeds = useMemo(
+    () =>
+      Array.from({ length: NUM_SEAWEEDS }).map((_, i) => ({
+        key: `seaweed-${i}`,
+        left: `${Math.floor(Math.random() * 95)}%`,
+        height: Math.floor(Math.random() * 100) + 60,
+      })),
+    []
+  );
 
   useEffect(() => {
     const oceanDiv = oceanRef.current;
@@ -64,22 +94,16 @@ const OceanScene: React.FC = () => {
         pointerEvents: "none",
       }}
     >
-      <Submarine />
-      {Array.from({ length: NUM_MINES }).map(() => {
-        const left = `${Math.floor(Math.random() * 85) + 5}%`;
-        const chainHeight = Math.floor(Math.random() * 50) + 80;
-        return <SeaMine left={left} chainHeight={chainHeight} />;
-      })}
-      {Array.from({ length: NUM_ROCKS }).map((_, i) => {
-        const left = `${Math.floor(Math.random() * 95)}%`;
-        const size = Math.floor(Math.random() * 40) + 20;
-        return <Rock key={`random-rock-${i}`} left={left} size={size} />;
-      })}
-      {Array.from({ length: NUM_SEAWEEDS }).map((_, i) => {
-        const left = `${Math.floor(Math.random() * 95)}%`;
-        const height = Math.floor(Math.random() * 100) + 60;
-        return <SeaWeed key={i} left={left} height={height} zIndex={100} />;
-      })}
+      <Submarine explode={explode} />
+      {mines.map((mine) => (
+        <SeaMine key={mine.key} left={mine.left} chainHeight={mine.chainHeight} />
+      ))}
+      {rocks.map((rock) => (
+        <Rock key={rock.key} left={rock.left} size={rock.size} />
+      ))}
+      {seaweeds.map((weed) => (
+        <SeaWeed key={weed.key} left={weed.left} height={weed.height} zIndex={100} />
+      ))}
     </div>
   );
 };

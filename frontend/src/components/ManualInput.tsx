@@ -1,9 +1,10 @@
 import type React from "react";
 import { useState } from "react";
 import { TextField, Button, Box, Alert, Snackbar } from "@mui/material";
-import { predictSonar } from "../services/sonarApi";
+import { usePredictSonar } from "../hooks/usePredictSonarData";
 import { z } from "zod";
 import PredictResult from "./PredictResult";
+import { useExplosion } from "../hooks/useExplosion";
 
 const sonarSchema = z.string().refine((val) => {
     const values = val.split(",").map(v => v.trim()).filter(v => v !== "");
@@ -14,19 +15,25 @@ const sonarSchema = z.string().refine((val) => {
 
 const ManualInput: React.FC = () => {
     const [inputText, setInputText] = useState("");
-    const [result, setResult] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+    const { setExplode } = useExplosion();
+
+    const { trigger, data, reset, error: swrError, isMutating } = usePredictSonar();
+
+    const handleReset = () => {
+        setInputText("");
+        setError(null);
+        setExplode(false);
+        if (reset) reset();
+    };
 
     const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setInputText(e.target.value);
         setError(null);
-        setResult(null);
     };
 
     const handleTextSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setResult(null);
 
         const validation = sonarSchema.safeParse(inputText);
         if (!validation.success) {
@@ -35,15 +42,14 @@ const ManualInput: React.FC = () => {
         }
 
         setError(null);
-        setLoading(true);
         try {
-            const response = await predictSonar(inputText);
-            setResult(response.prediction ? String(response.prediction) : JSON.stringify(response));
+            await trigger(inputText);
         } catch (error) {
             setError("Prediction failed. Please try again.");
             console.error("Prediction error:", error);
-        } finally {
-            setLoading(false);
+            if (error instanceof Error) {
+                console.error(error.message);
+            }
         }
     };
 
@@ -109,41 +115,43 @@ const ManualInput: React.FC = () => {
                             },
                         }}
                     />
-                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
                         <Button
                             type="submit"
                             variant="contained"
                             color="primary"
                             size="large"
                             sx={{ mt: 2 }}
-                            disabled={loading}
+                            disabled={isMutating}
                         >
-                            {loading ? "Predicting..." : "Predict"}
+                            {isMutating ? "Predicting..." : "Predict"}
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outlined"
+                            color="inherit" // or "secondary" or "primary" as you prefer
+                            size="large"
+                            sx={{ mt: 2 }}
+                            onClick={handleReset}
+                        >
+                            Reset
                         </Button>
                     </Box>
                 </form>
             </Box>
-            {
-                result && (
-                    <PredictResult
-                        result={result}
-                    />
-                )
-            }
-            {
-                error && (
-                    <Snackbar
-                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                        open={!!error}
-                        autoHideDuration={6000}
-                        onClose={() => setError(null)}
-                    >
-                        <Alert onClose={() => setError(null)} severity="error">
-                            {error}
-                        </Alert>
-                    </Snackbar>
-                )
-            }
+            {data?.data?.prediction && <PredictResult result={data.data.prediction} />}
+            {(error || swrError) && (
+                <Snackbar
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                    open={!!error || !!swrError}
+                    autoHideDuration={6000}
+                    onClose={() => setError(null)}
+                >
+                    <Alert onClose={() => setError(null)} severity="error">
+                        {error || swrError?.message}
+                    </Alert>
+                </Snackbar>
+            )}
         </>
     )
 }
