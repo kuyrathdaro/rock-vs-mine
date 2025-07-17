@@ -5,35 +5,38 @@ import RockSVG from "../assets/rock.svg";
 import { useExplosion } from "../hooks/useExplosion";
 
 const PredictResult: React.FC<{ result: string | null }> = ({ result }) => {
-    const { setExplode } = useExplosion();
     const isMine = result?.toUpperCase().includes("M");
     const isRock = result?.toUpperCase().includes("R");
 
+    const { explodeSubmarine, resetExplosion } = useExplosion();
+
     useEffect(() => {
-        setExplode(!!isMine);
-        // Optionally reset after 1.2s so the explosion can replay
         if (isMine) {
-            const timeout = setTimeout(() => setExplode(false), 1200);
-            return () => clearTimeout(timeout);
+            explodeSubmarine();
+        } else {
+            resetExplosion();
         }
-    }, [isMine, setExplode]);
+    }, [isMine, explodeSubmarine, resetExplosion]);
 
 
     return (
         <Box
             sx={{
-                mt: 4,
-                p: 3,
+                mt: 3,
+                p: 2,
                 borderRadius: 2,
+                maxWidth: "600px", // Match input box width
+                width: "100%",
+                mx: "auto",
                 background: isMine
                     ? "radial-gradient(circle at 60% 40%, #ff5252 0%, #7f1d1d 100%)"
                     : "radial-gradient(circle at 60% 40%, #60a5fa 0%, #1e293b 100%)",
                 color: "#fff",
                 textAlign: "center",
-                boxShadow: 6,
+                boxShadow: 4,
                 position: "relative",
                 overflow: "hidden",
-                minHeight: 320,
+                minHeight: 120, // Smaller height
             }}
         >
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, position: "relative", zIndex: 2 }}>
@@ -42,18 +45,26 @@ const PredictResult: React.FC<{ result: string | null }> = ({ result }) => {
                         <img
                             src={MineSVG}
                             alt="Mine"
-                            width={64}
-                            height={64}
+                            width={48}
+                            height={48}
                             style={{
                                 animation: "mine-spin 1.2s linear infinite",
                                 marginBottom: 8,
                             }}
                         />
-                        <Typography variant="h4" fontWeight="bold" color="#ff5252" sx={{ mt: 1, textShadow: "0 0 8px #fff" }}>
-                            BOOM! It's a Mine!
-                        </Typography>
-                        <Typography variant="body1" sx={{ mt: 1 }}>
-                            The submarine has exploded! Be careful!
+                        <Typography
+                            variant="h6"
+                            fontWeight="bold"
+                            color="#fff" // Use white text for contrast
+                            sx={{
+                                mt: 1,
+                                textShadow: "0 0 12px #fff, 0 0 24px #ff5252, 0 0 8px #fff700",
+                                letterSpacing: 2,
+                                fontFamily: "'Bangers', cursive, sans-serif",
+                                fontSize: { xs: "1.2rem", md: "1.5rem" },
+                            }}
+                        >
+                            💥 KABOOM! Submarine Hit a Mine!
                         </Typography>
                     </>
                 ) : isRock ? (
@@ -61,23 +72,61 @@ const PredictResult: React.FC<{ result: string | null }> = ({ result }) => {
                         <img
                             src={RockSVG}
                             alt="Rock"
-                            width={64}
-                            height={64}
+                            width={72}
+                            height={72}
                             style={{
                                 animation: "rock-pop 0.9s cubic-bezier(.36,.07,.19,.97)",
-                                marginBottom: 8,
+                                marginBottom: "-55px", // Negative margin to overlap wave
+                                zIndex: 2,
+                                position: "relative",
                             }}
                         />
-                        <div className="waves" />
-                        <Typography variant="h4" fontWeight="bold" color="#90ee90" sx={{ mt: 1, textShadow: "0 0 8px #fff" }}>
+                        <svg
+                            width="100"
+                            height="28"
+                            viewBox="0 0 100 28"
+                            style={{
+                                display: "block",
+                                margin: "0 auto",
+                                position: "relative",
+                                zIndex: 1,
+                            }}
+                        >
+                            <path
+                                id="wave"
+                                fill="#60a5fa"
+                                opacity="0.7"
+                                d="M0 14 Q 25 0, 50 14 T 100 14 V28 H0 Z"
+                            >
+                                <animate
+                                    attributeName="d"
+                                    dur="2s"
+                                    repeatCount="indefinite"
+                                    values="
+          M0 14 Q 25 0, 50 14 T 100 14 V28 H0 Z;
+          M0 14 Q 25 28, 50 14 T 100 14 V28 H0 Z;
+          M0 14 Q 25 0, 50 14 T 100 14 V28 H0 Z
+        "
+                                />
+                            </path>
+                        </svg>
+                        <Typography
+                            variant="h6"
+                            fontWeight="bold"
+                            color="#90ee90"
+                            sx={{
+                                mt: 1,
+                                textShadow: "0 0 6px #fff", // subtle shadow for readability
+                            }}
+                        >
                             All Clear! It's a Rock.
                         </Typography>
-                        <Typography variant="body1" sx={{ mt: 1 }}>
+                        <Typography variant="body2" sx={{ mt: 1 }}>
                             The submarine is safe. Proceed!
                         </Typography>
                     </>
                 ) : (
-                    <Typography variant="h6">
+                    <Typography variant="body1">
                         Prediction Result: {result}
                     </Typography>
                 )}
@@ -90,16 +139,16 @@ const PredictResult: React.FC<{ result: string | null }> = ({ result }) => {
                     100% { transform: rotate(360deg);}
                 }
                 @keyframes rock-pop {
-                    0% { transform: scale(0.7);}
-                    60% { transform: scale(1.2);}
-                    100% { transform: scale(1);}
+                    0% { transform: scale(0.7); }
+                    60% { transform: scale(1.2); }
+                    100% { transform: scale(1); }
                 }
                 .waves {
                     position: absolute;
                     left: 50%;
-                    top: 120px;
-                    width: 140px;
-                    height: 40px;
+                    top: 80px;
+                    width: 100px;
+                    height: 28px;
                     background: repeating-radial-gradient(circle at 70% 60%, #60a5fa 0 8px, #1e293b 10px 20px, transparent 22px 40px);
                     border-radius: 50%;
                     opacity: 0.5;

@@ -4,7 +4,6 @@ import SeaMine from "./SeaMine";
 import SeaWeed from "./SeaWeed";
 import Rock from "./Rock";
 import Submarine from "./Submarine";
-import { useExplosion } from "../hooks/useExplosion";
 
 const NUM_SEAWEEDS: number = 100;
 const NUM_MINES: number = 5;
@@ -12,7 +11,6 @@ const NUM_ROCKS: number = 20;
 
 const OceanScene: React.FC = () => {
   const oceanRef = useRef<HTMLDivElement>(null);
-  const { explode } = useExplosion();
 
     const mines = useMemo(
     () =>
@@ -94,7 +92,7 @@ const OceanScene: React.FC = () => {
         pointerEvents: "none",
       }}
     >
-      <Submarine explode={explode} />
+      <Submarine />
       {mines.map((mine) => (
         <SeaMine key={mine.key} left={mine.left} chainHeight={mine.chainHeight} />
       ))}

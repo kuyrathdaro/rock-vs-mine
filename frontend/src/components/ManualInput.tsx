@@ -16,14 +16,14 @@ const sonarSchema = z.string().refine((val) => {
 const ManualInput: React.FC = () => {
     const [inputText, setInputText] = useState("");
     const [error, setError] = useState<string | null>(null);
-    const { setExplode } = useExplosion();
+    const { resetExplosion } = useExplosion();
 
     const { trigger, data, reset, error: swrError, isMutating } = usePredictSonar();
 
     const handleReset = () => {
         setInputText("");
         setError(null);
-        setExplode(false);
+        resetExplosion();
         if (reset) reset();
     };
 
