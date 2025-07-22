@@ -1,23 +1,47 @@
 import type React from "react";
 import { useState } from "react";
-import { Button, Typography, Box, Paper } from "@mui/material";
+import { Button, Typography, Box, Paper, Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { usePredictSonarCSV } from "../hooks/usePredictSonarData";
+
+const EXPECTED_COLUMNS = 60;
 
 const UploadCSV: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    // SWR mutation for backend prediction
+    const { trigger, data, isMutating } = usePredictSonarCSV();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setError(null);
         if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
+            const selected = e.target.files[0];
+            if (!selected.name.endsWith(".csv")) {
+                setError("Please upload a .csv file.");
+                setFile(null);
+                return;
+            }
+            setFile(selected);
         }
     };
 
-    const handleFileSubmit = (e: React.FormEvent) => {
+    const handleFileSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (file) {
-            alert(`Predicting for file: ${file.name}`);
+        setError(null);
+        if (!file) {
+            setError("No file selected.");
+            return;
+        }
+        try {
+            await trigger(file);
+        } catch {
+            setError("Prediction failed.");
         }
     };
+
+    // Assume backend returns: { predictions: ["Mine", "Rock", ...] }
+    const predictions: string[] = data?.predictions || [];
 
     return (
         <Paper
@@ -56,11 +80,34 @@ const UploadCSV: React.FC = () => {
                             ? <>Selected file: <b>{file.name}</b></>
                             : "Choose a CSV file with sonar data (one row per sample, no header required)."}
                     </Typography>
-                    <Button type="submit" variant="contained" color="primary" size="large" sx={{ mt: 2 }}>
-                        Predict
+                    {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+                    <Button type="submit" variant="contained" color="primary" size="large" sx={{ mt: 2 }} disabled={isMutating}>
+                        {isMutating ? "Predicting..." : "Predict"}
                     </Button>
                 </Box>
             </form>
+            {predictions.length > 0 && (
+                <TableContainer component={Paper} sx={{ mt: 4, background: "rgba(16,40,80,0.85)" }}>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell sx={{ color: "#90caf9" }}>#</TableCell>
+                                <TableCell sx={{ color: "#90caf9" }}>Prediction</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {predictions.map((pred, idx) => (
+                                <TableRow key={idx}>
+                                    <TableCell sx={{ color: "#fff" }}>{idx + 1}</TableCell>
+                                    <TableCell sx={{ color: pred.toLowerCase().includes("mine") ? "#ff5252" : "#90ee90", fontWeight: "bold" }}>
+                                        {pred}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            )}
         </Paper>
     );
 };

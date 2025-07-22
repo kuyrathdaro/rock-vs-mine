@@ -13,3 +13,4 @@ dependencies:
   - pip:
     - fastapi
     - uvicorn
+    - python-multipart
