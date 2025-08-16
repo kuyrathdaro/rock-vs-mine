@@ -27,12 +27,15 @@ def predict(data: SonarInput = Body(...)):
 @router.post("/predict-csv")
 def predict_csv(file: UploadFile = File(...)):
     try:
-        df = pd.read_csv(file.file)
-        predictions = df["data"].apply(make_prediction)
+        df = pd.read_csv(file.file, header=None)
+        predictions = df.apply(lambda row: make_prediction(row.tolist()), axis = 1)
         df["prediction"] = predictions
+        df.columns = [f"feature_{i+1}" for i in range(df.shape[1] - 1)] + ["prediction"]
         return api_response(
             message="Success",
             data=df.to_dict(orient="records")
         )
     except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
