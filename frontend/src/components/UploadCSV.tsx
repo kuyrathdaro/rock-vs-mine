@@ -4,7 +4,7 @@ import { Button, Typography, Box, Paper, Alert, Table, TableBody, TableCell, Tab
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { usePredictSonarCSV } from "../hooks/usePredictSonarData";
 
-const EXPECTED_COLUMNS = 60;
+const EXPECTED_COLUMNS: number = 60; 
 
 const UploadCSV: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);

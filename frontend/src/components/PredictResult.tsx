@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
-import MineSVG from "../assets/mine.svg";
-import RockSVG from "../assets/rock.svg";
+import lightMine from "../assets/mine-light.svg";
+import Rock from "../assets/rock.svg";
 import { useExplosion } from "../hooks/useExplosion";
 
 const PredictResult: React.FC<{ result: string | null }> = ({ result }) => {
@@ -43,13 +43,14 @@ const PredictResult: React.FC<{ result: string | null }> = ({ result }) => {
                 {isMine ? (
                     <>
                         <img
-                            src={MineSVG}
+                            src={lightMine}
                             alt="Mine"
                             width={48}
                             height={48}
+                            color="white"
                             style={{
                                 animation: "mine-spin 1.2s linear infinite",
-                                marginBottom: 8,
+                                marginBottom: 8
                             }}
                         />
                         <Typography
@@ -70,7 +71,7 @@ const PredictResult: React.FC<{ result: string | null }> = ({ result }) => {
                 ) : isRock ? (
                     <>
                         <img
-                            src={RockSVG}
+                            src={Rock}
                             alt="Rock"
                             width={72}
                             height={72}

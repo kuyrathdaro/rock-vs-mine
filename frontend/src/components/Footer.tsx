@@ -1,5 +1,5 @@
 import React from "react";
-import mine from "../assets/mine.svg";
+import darkMine from "../assets/mine-dark.svg";
 import rock from "../assets/rock.svg";
 import { NavLink } from "react-router"; // Use react-router-dom
 
@@ -18,7 +18,7 @@ const Footer: React.FC<FooterProps> = ({ year }) => (
         <span className="mr-2 text-xl">Rock</span>
         <img src={rock} alt="Rock" className="h-7 w-7 inline mr-2" />
         <span className="text-xl font-bold">vs</span>
-        <img src={mine} alt="Mine" className="h-6 w-6 inline ml-2" />
+        <img src={darkMine} alt="Mine" className="h-6 w-6 inline ml-2" />
         <span className="ml-2 text-xl">Mine</span>
       </NavLink>
       <div className="mb-1">
