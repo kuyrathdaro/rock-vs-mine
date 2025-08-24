@@ -113,6 +113,9 @@ const ManualInput: React.FC = () => {
                                     border: "1px solid rgba(191,219,254,0.3)",
                                 },
                             },
+                            "& .MuiFormHelperText-root": {
+                                color: error ? "#ff0000" : "#fff"
+                            }
                         }}
                     />
                     <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>

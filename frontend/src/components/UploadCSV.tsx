@@ -1,10 +1,11 @@
 import type React from "react";
 import { useState } from "react";
-import { Button, Typography, Box, Paper, Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Button, Typography, Box, Paper, Alert } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { usePredictSonarCSV } from "../hooks/usePredictSonarData";
+import PredictionTable from "./PredictionTable";
 
-const EXPECTED_COLUMNS: number = 60; 
+const EXPECTED_COLUMNS: number = 60;
 
 const UploadCSV: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
@@ -22,7 +23,30 @@ const UploadCSV: React.FC = () => {
                 setFile(null);
                 return;
             }
-            setFile(selected);
+
+            // Validate CSV content
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const text = event.target?.result as string;
+                const rows = text.trim().split(/\r?\n/);
+                for (let i = 0; i < rows.length; i++) {
+                    const cols = rows[i].split(",");
+                    if (cols.length !== EXPECTED_COLUMNS) {
+                        setError(`Row ${i + 1} does not have ${EXPECTED_COLUMNS} columns.`);
+                        setFile(null);
+                        return;
+                    }
+                    for (let j = 0; j < cols.length; j++) {
+                        if (isNaN(Number(cols[j]))) {
+                            setError(`Row ${i + 1}, column ${j + 1} is not a valid number.`);
+                            setFile(null);
+                            return;
+                        }
+                    }
+                }
+                setFile(selected);
+            };
+            reader.readAsText(selected);
         }
     };
 
@@ -40,75 +64,57 @@ const UploadCSV: React.FC = () => {
         }
     };
 
-    // Assume backend returns: { predictions: ["Mine", "Rock", ...] }
-    const predictions: string[] = data?.predictions || [];
+    const predictions = Array.isArray(data?.data) ? data.data : [];
 
     return (
-        <Paper
-            elevation={6}
-            sx={{
-                backdropFilter: "blur(8px)",
-                background: "rgba(255,255,255,0.10)",
-                border: "1px solid rgba(191,219,254,0.3)",
-                borderRadius: 3,
-                boxShadow: 6,
-                maxWidth: "600px",
-                width: "100%",
-                p: 4,
-                mx: "auto",
-                color: "#fff"
-            }}
-        >
-            <form onSubmit={handleFileSubmit}>
-                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <Button
-                        variant="contained"
-                        component="label"
-                        startIcon={<UploadFileIcon />}
-                        sx={{ mb: 2, bgcolor: "#1976d2", color: "#fff", "&:hover": { bgcolor: "#1565c0" } }}
-                    >
-                        Upload CSV
-                        <input
-                            type="file"
-                            accept=".csv"
-                            hidden
-                            onChange={handleFileChange}
-                        />
-                    </Button>
-                    <Typography variant="body2" color="#bbdefb" sx={{ mb: 2, textAlign: "center" }}>
-                        {file
-                            ? <>Selected file: <b>{file.name}</b></>
-                            : "Choose a CSV file with sonar data (one row per sample, no header required)."}
-                    </Typography>
-                    {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-                    <Button type="submit" variant="contained" color="primary" size="large" sx={{ mt: 2 }} disabled={isMutating}>
-                        {isMutating ? "Predicting..." : "Predict"}
-                    </Button>
-                </Box>
-            </form>
+        <>
+            <Paper
+                elevation={6}
+                sx={{
+                    backdropFilter: "blur(8px)",
+                    background: "rgba(255,255,255,0.10)",
+                    border: "1px solid rgba(191,219,254,0.3)",
+                    borderRadius: 3,
+                    boxShadow: 6,
+                    maxWidth: "600px",
+                    width: "100%",
+                    p: 4,
+                    mx: "auto",
+                    color: "#fff"
+                }}
+            >
+                <form onSubmit={handleFileSubmit}>
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Button
+                            variant="contained"
+                            component="label"
+                            startIcon={<UploadFileIcon />}
+                            sx={{ mb: 2, bgcolor: "#1976d2", color: "#fff", "&:hover": { bgcolor: "#1565c0" } }}
+                        >
+                            Upload CSV
+                            <input
+                                type="file"
+                                accept=".csv"
+                                hidden
+                                onChange={handleFileChange}
+                            />
+                        </Button>
+                        <Typography variant="body2" color="#bbdefb" sx={{ mb: 2, textAlign: "center" }}>
+                            {file
+                                ? <>Selected file: <b>{file.name}</b></>
+                                : "Choose a CSV file with sonar data (one row per sample, no header required)."}
+                        </Typography>
+                        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+                        <Button type="submit" variant="contained" color="primary" size="large" sx={{ mt: 2 }} disabled={isMutating}>
+                            {isMutating ? "Predicting..." : "Predict"}
+                        </Button>
+                    </Box>
+                </form>
+            </Paper>
             {predictions.length > 0 && (
-                <TableContainer component={Paper} sx={{ mt: 4, background: "rgba(16,40,80,0.85)" }}>
-                    <Table size="small">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ color: "#90caf9" }}>#</TableCell>
-                                <TableCell sx={{ color: "#90caf9" }}>Prediction</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {predictions.map((pred, idx) => (
-                                <TableRow key={idx}>
-                                    <TableCell sx={{ color: "#fff" }}>{idx + 1}</TableCell>
-                                    <TableCell sx={{ color: pred.toLowerCase().includes("mine") ? "#ff5252" : "#90ee90", fontWeight: "bold" }}>
-                                        {pred}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <PredictionTable data={predictions} />
             )}
-        </Paper>
+        </>
     );
 };
 
