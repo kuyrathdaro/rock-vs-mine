@@ -2,6 +2,7 @@ import type React from "react";
 import { useState } from "react";
 import { TextField, Button, Box, Alert, Snackbar } from "@mui/material";
 import { usePredictSonar } from "../hooks/usePredictSonarData";
+import { useHistoryDb } from "../hooks/useHistoryDb";
 import { z } from "zod";
 import PredictResult from "./PredictResult";
 import { useExplosion } from "../hooks/useExplosion";
@@ -19,6 +20,7 @@ const ManualInput: React.FC = () => {
     const { resetExplosion } = useExplosion();
 
     const { trigger, data, reset, error: swrError, isMutating } = usePredictSonar();
+    const { saveToHistory } = useHistoryDb();
 
     const handleReset = () => {
         setInputText("");
@@ -43,7 +45,15 @@ const ManualInput: React.FC = () => {
 
         setError(null);
         try {
-            await trigger(inputText);
+            const result = await trigger(inputText);
+            // Save to history after successful prediction
+            if (result?.data?.prediction) {
+                await saveToHistory(
+                    "manual",
+                    inputText,
+                    [{ features: inputText, prediction: result.data.prediction }]
+                );
+            }
         } catch (error) {
             setError("Prediction failed. Please try again.");
             console.error("Prediction error:", error);

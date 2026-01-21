@@ -11,7 +11,7 @@ const Layout: React.FC = () => (
     <main className="flex-1 relative z-30 flex flex-col">
       <Outlet />
     </main>
-    <Footer year={2025} />
+    <Footer year={new Date().getFullYear()} />
   </div>
 );
 

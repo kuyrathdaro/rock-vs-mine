@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button, Typography, Box, Paper, Alert } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { usePredictSonarCSV } from "../hooks/usePredictSonarData";
+import { useHistoryDb } from "../hooks/useHistoryDb";
 import PredictionTable from "./PredictionTable";
 
 const EXPECTED_COLUMNS: number = 60;
@@ -13,6 +14,7 @@ const UploadCSV: React.FC = () => {
 
     // SWR mutation for backend prediction
     const { trigger, data, isMutating } = usePredictSonarCSV();
+    const { saveToHistory } = useHistoryDb();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setError(null);
@@ -58,7 +60,16 @@ const UploadCSV: React.FC = () => {
             return;
         }
         try {
-            await trigger(file);
+            const result = await trigger(file);
+            // Save to history after successful prediction
+            if (result?.data && Array.isArray(result.data)) {
+                await saveToHistory(
+                    "csv",
+                    file.name,
+                    result.data,
+                    file.name
+                );
+            }
         } catch {
             setError("Prediction failed.");
         }
